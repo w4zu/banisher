@@ -81,10 +81,11 @@ func (b *Banisher) Add(ip, ruleName string) {
 	}
 
 	// iptables
-	if err = b.IPT.AppendUnique("filter", "INPUT", "-s", ip, "-j", "DROP"); err != nil {
+	if err = b.IPT.Insert("filter", "INPUT", 1, "-s", ip, "-j", "DROP"); err != nil {
 		log.Println("failed to ad iptable rule:", err)
 		return
 	}
+
 	// add to badger
 	err = b.db.Update(func(txn *badger.Txn) error {
 		return txn.Set([]byte(ip), []byte(strconv.FormatInt(time.Now().Add(time.Duration(config.DefaultBanishmentDuration)*time.Second).Unix(), 10)))
