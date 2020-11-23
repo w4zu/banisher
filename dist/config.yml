@@ -3,7 +3,7 @@ defaultBanishmentDuration: 3600
 
 # whitelisted IP
 whitelist:
-  - 163.172.180.201
+  - {{ YOURIP }}
 
 # rules
 rules:
@@ -27,3 +27,10 @@ rules:
     match: Failed password.*ssh2
     IPpos: 0
 
+  - name: pam_unix
+    match: pam_unix(sshd:auth):.*authentication failure;*
+    IPpos: 0
+
+  - name: pure-ftpd
+    match: pure-ftpd:.*Authentication failed*
+    IPpos: 0
